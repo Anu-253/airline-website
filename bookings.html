@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bookings - Airgo</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/firebase-config.js"></script>
+  <script defer src="js/auth.js"></script>
+  <script defer src="js/flight-api.js"></script>
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <header class="nav">
+    <a href="index.html" class="logo" id="homeLogo" aria-label="Airgo Home">✈️ Airgo</a>
+    <nav>
+      <button class="btn" data-link="index.html">Home</button>
+      <button class="btn" id="logoutBtn">Logout</button>
+          <button class="btn" data-open-booking="true">Book Flights</button>
+          <button class="btn" data-link="history.html">My Bookings</button>
+    </nav>
+  </header>
+
+  <main class="container">
+  <div style="border-radius:12px;overflow:hidden;margin-bottom:12px;"><img src="images/airp.jpg" alt="Airgo banner" style="width:100%;height:180px;object-fit:cover;display:block;"></div>
+    <section class="card">
+      <h2>Search Flights (Demo)</h2>
+      <form id="bookingForm" aria-label="Flight search">
+        <label>From (Country)<input type="text" id="origin" placeholder="e.g. India" required></label>
+        <label>To (Country)<input type="text" id="destination" placeholder="e.g. United States" required></label>
+        <label>Departure Date<input type="date" id="depart" required></label>
+        <label>Return Date (optional)<input type="date" id="return"></label>
+        <button class="btn primary" type="submit">Search Flights</button>
+      </form>
+      <div id="bookingResult" style="margin-top:12px;"></div>
+
+      <div id="flightResults" class="flight-list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <!-- Payment Modal (glowing popup) -->
+  <div id="paymentBackdrop" class="payment-modal-backdrop" role="dialog" aria-hidden="true">
+    <div class="payment-modal" id="paymentModal" role="document">
+      <h3 id="payTitle">Complete Payment</h3>
+      <p id="payInfo" style="margin-top:4px;color:#123;">Pay securely to confirm your booking</p>
+      <form id="paymentForm" style="margin-top:12px;">
+        <label style="display:block;">Passport Number<input type="text" id="passportNumber" placeholder="Passport number (if required)" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);margin-top:6px;"></label>
+        <div id="visaNotice" style="display:none;margin-top:8px;padding:10px;background:linear-gradient(180deg,#fff,#f6fbff);border-radius:8px;border:1px solid rgba(0,0,0,0.04);font-size:0.95rem;"><strong>Visa required:</strong> This itinerary appears international — please ensure you have the required visa. Confirm you have the visa to travel: <label style="display:inline-block;margin-left:8px;"><input type="checkbox" id="visaConfirm"> I confirm I have the required visa</label></div>
+        <label>Cardholder Name<input type="text" id="cardName" required></label>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <input type="text" id="cardNumber" placeholder="Card number" required style="flex:2;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+          <input type="text" id="cardExpiry" placeholder="MM/YY" required style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+          <input type="text" id="cardCVC" placeholder="CVC" required style="flex:.8;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;align-items:center;justify-content:flex-end;">
+          <button type="button" class="btn outline" id="cancelPay">Cancel</button>
+          <button type="submit" class="btn primary">Pay Now</button>
+        </div>
+      </form>
+      <div id="paymentResult" style="margin-top:12px;"></div>
+    </div>
+  </div>
+
+  <script>
+    // Delegated click handlers & booking flow integrated with payment modal
+    async function openPaymentModal(flightObj, origin, destination, depart, ret){
+      const backdrop = document.getElementById('paymentBackdrop');
+      const title = document.getElementById('payTitle');
+      const info = document.getElementById('payInfo');
+      backdrop.style.display = 'flex';
+      backdrop.setAttribute('aria-hidden','false');
+      document.getElementById('cardName').focus();
+      title.innerText = 'Pay ₹' + flightObj.price + ' to confirm';
+      info.innerText = flightObj.carrier + ' — ' + origin + ' → ' + destination + ' | ' + depart + (ret ? ' | Return: '+ret : '');
+      // attach a one-time submit handler
+      const paymentForm = document.getElementById('paymentForm');
+      const paymentResult = document.getElementById('paymentResult');
+      const onSubmit = async (e)=>{ /* payment submit handler with visa/passport validation */
+        e.preventDefault();
+        const visaNoticeEl = document.getElementById('visaNotice'); const visaChk = document.getElementById('visaConfirm'); const passportEl = document.getElementById('passportNumber'); if(visaNoticeEl && visaNoticeEl.style.display !== 'none'){ if(!visaChk || !visaChk.checked){ alert('Please confirm you have the required visa to travel.'); return; } if(!passportEl || !passportEl.value.trim()){ alert('Passport number is required for international travel.'); return; } } paymentResult.innerText = 'Processing payment...';
+        // simulate processing
+        setTimeout(async ()=>{
+          paymentResult.innerText = 'Payment successful! Confirming booking...';
+          // save booking if firebase available
+          if(window.firebase && firebase.auth && firebase.auth().currentUser){
+            try{
+              const db = firebase.firestore();
+              const user = firebase.auth().currentUser;
+              await db.collection('bookings').add({
+                transactionId: 'txn_' + Math.random().toString(36).substr(2,9),
+                paymentMethod: 'stripe_test_sim',
+                userId: user.uid,
+                flightId: flightObj.id,
+                carrier: flightObj.carrier,
+                origin, destination, depart, ret: ret || null,
+                price: flightObj.price,
+                paymentStatus: 'Paid',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+              });
+              paymentResult.innerHTML = '<span style="color:green;">Booking saved and paid. Redirecting to bookings...</span>';
+            } catch(err){
+              paymentResult.innerHTML = '<span style="color:red;">Payment succeeded but failed saving booking: '+err.message+'</span>';
+            }
+          } else {
+            paymentResult.innerHTML = '<span style="color:green;">Payment succeeded (demo). Log in to save booking to your account.</span>';
+          }
+          setTimeout(()=> closePaymentModal(), 1400);
+        }, 900 + Math.random()*600);
+      };
+      paymentForm.addEventListener('submit', onSubmit, {once:true});
+
+      document.getElementById('cancelPay').onclick = function(){
+        paymentBackdrop.style.display = 'none';
+        paymentBackdrop.setAttribute('aria-hidden','true');
+      };
+    }
+
+    function closePaymentModal(){
+      const backdrop = document.getElementById('paymentBackdrop');
+      backdrop.style.display = 'none';
+      backdrop.setAttribute('aria-hidden','true');
+      // clear fields
+      document.getElementById('paymentForm').reset();
+      document.getElementById('paymentResult').innerText = '';
+    }
+
+    document.addEventListener('click', (e)=>{
+      const btn = e.target.closest('[data-link]');
+      if(btn) window.location.href = btn.dataset.link;
+      const bookBtn = e.target.closest('[data-book-id]');
+      if(bookBtn){
+        const json = bookBtn.dataset.flightJson;
+        const flight = JSON.parse(json);
+        const origin = document.getElementById('origin').value;
+        const destination = document.getElementById('destination').value;
+        const depart = document.getElementById('depart').value;
+        const ret = document.getElementById('return').value;
+        openPaymentModal(flight, origin, destination, depart, ret);
+      }
+    });
+
+    // booking search handled in main.js/flight-api.js - no change needed
+    // small accessibility: close modal on Escape
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape'){ closePaymentModal(); }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Airgo - Home</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/firebase-config.js"></script>
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <header class="nav">
+    <a href="index.html" class="logo" id="homeLogo" aria-label="Airgo Home">✈️ Airgo</a>
+    <nav>
+      <button class="btn ghost" data-link="login.html">Login</button>
+      <button class="btn" data-link="signup.html">Sign Up</button>
+      <button class="btn" data-scroll="faqs">FAQ</button>
+      <button class="btn" data-link="bookings.html">Bookings</button>
+          <button class="btn" data-open-booking="true">Book Flights</button>
+          <button class="btn" data-link="history.html">My Bookings</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner frosted" role="banner" aria-label="Airgo hero">
+        <h1>Airgo — Fly with comfort</h1>
+        <p>Find flights, manage bookings and get support — all in one place.</p>
+        <div class="hero-actions">
+          <button class="btn primary" data-link="signup.html">Get Started</button>
+          <button class="btn outline" data-link="bookings.html">Book a Flight</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" aria-labelledby="features-heading">
+      <h2 id="features-heading" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Features</h2>
+      <div class="feature-card">
+        <h3>Simple Booking</h3>
+        <p>Fast flight search and checkout.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Secure Payments</h3>
+        <p>Trusted payment partners.</p>
+      </div>
+      <div class="feature-card">
+        <h3>24/7 Support</h3>
+        <p>We're here to help anytime.</p>
+      </div>
+    </section>
+
+    <section id="faqs" class="faqs-section">
+      <h2>Support / FAQ</h2>
+
+      <div class="tabs" id="faqTabs">
+        <div class="tab-buttons">
+          <button class="tab-btn" data-tab="refund">Refund Policy</button>
+          <button class="tab-btn" data-tab="luggage">Luggage Allowance</button>
+          <button class="tab-btn" data-tab="support">Customer Support</button>
+        </div>
+
+        
+        <div class="tab-panels">
+          <div class="panel" id="refund">
+            <div class="question">What is the refund policy?</div>
+            <div class="answer">
+              Most Airgo fares are refundable depending on the fare class. Fully refundable fares allow cancellations with no penalty, while discounted or promotional fares may be non-refundable or incur a cancellation fee. Refunds are processed to the original payment method and may take 5–10 business days depending on the bank. For changes, fees may apply — please contact Customer Support with your booking reference for a personalized response.
+            </div>
+          </div>
+
+          <div class="panel" id="luggage">
+            <div class="question">What's the luggage allowance?</div>
+            <div class="answer">
+              Luggage allowance varies by route and fare class. For most standard fares, Airgo includes one carry-on (up to 7kg) and one checked bag (up to 23kg). Overweight, oversized, and extra bags incur additional charges which can be added at booking or at check-in. Always check your booking confirmation for the exact allowance tied to your ticket.
+            </div>
+          </div>
+
+          <div class="panel" id="support">
+            <div class="question">How do I contact customer support?</div>
+            <div class="answer">
+              Our support team is available 24/7. Email: <a href="mailto:support@airgo.com">support@airgo.com</a>. Phone (India): <strong>+91-81234-56789</strong>. For fastest assistance, use the in-app chat on the Bookings page or include your booking reference in the email.
+            </div>
+          </div>
+        </div>
+
+
+  </main>\n<div id="chatbot" style="position:fixed; right:18px; bottom:18px; width:320px; max-width:90vw; background:#fff; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.2); padding:10px; z-index:99999;"></div>
+
+  <footer class="footer">
+    <p>&copy; 2025 Airgo</p>
+  </footer>
+
+
+<!-- Booking Modal (Option 2) -->
+<div id="bookingModalBackdrop" class="payment-modal-backdrop" aria-hidden="true">
+  <div class="payment-modal" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bookingTitle">
+    <div style="display:flex;gap:12px;align-items:center;">
+      <img src="images/airp.jpg" alt="Airplane" style="width:72px;height:48px;object-fit:cover;border-radius:8px;border:1px solid rgba(0,0,0,0.06);">
+      <div>
+        <h3 id="bookingTitle" style="margin:0;">Book a Flight</h3>
+        <div id="bookingSubtitle" style="font-size:0.9rem;color:#123;margin-top:4px;">Quick booking — proceed to payment in the same flow</div>
+      </div>
+    </div>
+
+    <form id="quickBookingForm" style="margin-top:12px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <input type="text" id="qbOrigin" placeholder="From (Country)" name="from-country" required style="padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+        <input type="text" id="qbDestination" placeholder="To (Country)" name="to-country" required style="padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+        <input type="date" id="qbDepart" required style="padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+        <input type="date" id="qbReturn" style="padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+        <button type="button" class="btn outline" id="qbCancel">Cancel</button>
+        <button type="submit" class="btn primary">Continue to Payment</button>
+      </div>
+    </form>
+
+    <div id="qbResult" style="margin-top:12px;"></div>
+  </div>
+</div>
+
+
+  
+  <!-- About Section (Aesthetic Centered) -->
+  <section id="about" class="about-section" aria-labelledby="aboutHeading" style="padding:80px 20px; text-align:center; background:linear-gradient(180deg,#ffffff,#f5f9ff);">
+    <div style="max-width:700px; margin:0 auto;">
+      <h2 id="aboutHeading" style="font-size:2rem; font-weight:800; margin-bottom:16px; color:#2563eb;">About Airgo</h2>
+      <p style="font-size:1.1rem; line-height:1.6; opacity:0.85;">
+        Airgo is your modern flight booking companion — lightweight, fast, and built for seamless travel planning.
+        Compare flights, track prices, and manage your history effortlessly. Designed with simplicity and speed at its core.
+      </p>
+      <p style="margin-top:16px; font-size:0.95rem; opacity:0.6;">✉ support@airgo.example</p>
+    </div>
+  </section>
+  <!-- End About Section -->
+
+
+\n<script src="js/autocomplete.js"></script>\n<script src="js/chatbot.js"></script>\n</body>
+</html>
