@@ -1,26 +1,62 @@
-# ✈️ Airline Website
+# ✈️ Airgo – Airline Booking Website
 
-A modern, responsive airline booking website built with HTML, CSS, and JavaScript.  
-This project allows users to search, book, and manage flights easily with a simple UI and smart chatbot integration.
+Airgo is a responsive airline booking web application designed to simplify the flight booking experience. Users can explore available flights, create accounts, manage bookings, and access customer support through an intuitive interface.
+
+## 📸 Project Preview
+
+![Airgo Homepage](Screenshot-2025-10-16-225502.png)
+
+## 🚀 Key Features
+
+### 🏠 Interactive Homepage
+- Modern landing page with airline branding
+- Clean and user-friendly interface
+- Responsive layout for desktop and mobile devices
+
+### 👤 User Authentication
+- User registration system
+- Secure login functionality
+- Personalized user experience
+
+### 🛫 Flight Booking System
+- Search available flights
+- Book flights through a simple workflow
+- Manage existing reservations
+
+### 💬 Customer Support
+- Integrated chatbot assistance
+- FAQ section for common queries
+- Contact and support resources
+
+### 📱 Responsive Design
+- Optimized for desktop, tablet, and mobile devices
+- Consistent user experience across screen sizes
 
 ---
 
-## 🌐 Features
+## 🛠️ Technologies Used
 
-- 🧭 **Home Page** with airline info and visuals  
-- 💬 **Smart Chatbot** for instant support  
-- 🪪 **User Registration & Login** system  
-- 🛫 **Search & Book Flights** functionality  
-- 📞 **Contact Section** with FAQs and support links  
-- 🎨 Fully **Responsive Design** for all devices  
+| Technology | Purpose |
+|------------|----------|
+| HTML5 | Structure and content |
+| CSS3 | Styling and responsive design |
+| JavaScript | Interactive functionality |
+| Git & GitHub | Version control and project management |
 
 ---
 
-## 🧰 Tech Stack
+## 📂 Project Structure
 
-- **Frontend:** HTML, CSS, JavaScript  
-- **Backend (optional):** Firebase   
-- **Version Control:** Git & GitHub  
+```text
+airline-website/
+├── index.html
+├── login.html
+├── signup.html
+├── bookings.html
+├── history.html
+├── css/
+├── js/
+└── assets/
 
 ---
 
