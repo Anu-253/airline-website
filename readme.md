@@ -4,7 +4,8 @@ Airgo is a responsive airline booking web application designed to simplify the f
 
 ## 📸 Project Preview
 
-![Airgo Homepage](Screenshot-2025-10-16-225502.png)
+<img width="1277" height="606" alt="image" src="https://github.com/user-attachments/assets/a0205377-9599-4420-b551-8cf51a985102" />
+
 
 ## 🚀 Key Features
 
