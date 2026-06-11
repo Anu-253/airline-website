@@ -4,11 +4,12 @@
 ![HTML](https://img.shields.io/badge/HTML-5-orange)
 ![CSS](https://img.shields.io/badge/CSS-3-blue)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)
+
 Airgo is a responsive airline booking web application designed to simplify the flight booking experience. Users can explore available flights, create accounts, manage bookings, and access customer support through an intuitive interface.
 
 ## 📸 Project Preview
 
-<img width="700" height="606" alt="image" src="https://github.com/user-attachments/assets/a0205377-9599-4420-b551-8cf51a985102" />
+<img width="1277" height="606" alt="image" src="https://github.com/user-attachments/assets/a0205377-9599-4420-b551-8cf51a985102" />
 
 
 
@@ -26,7 +27,7 @@ Airgo is a responsive airline booking web application designed to simplify the f
 - Secure login functionality
 - Personalized user experience
 
-<img width="700" height="603" alt="image" src="https://github.com/user-attachments/assets/7ef08264-3f1a-4e25-9811-48eec9a989ac" />
+<img width="1252" height="603" alt="image" src="https://github.com/user-attachments/assets/7ef08264-3f1a-4e25-9811-48eec9a989ac" />
 
 ### 🛫 Flight Booking System
 - Search available flights
